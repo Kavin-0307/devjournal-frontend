@@ -1,0 +1,18 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+body {
+  font-family: "Inter", sans-serif;
+  color: #E5E7EB; /* soft white, not pure */
+  background: #0B0F17;
+  margin: 0;
+  padding: 0;
+}
+main {
+  overflow-y: auto;
+}
+
+/* Prevent content from hiding behind sticky navbar */
+.content-area {
+  padding-top: 16px;
+}

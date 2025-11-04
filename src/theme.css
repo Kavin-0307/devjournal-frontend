@@ -1,0 +1,36 @@
+/* Base theme */
+:root {
+  --bg: #ffffff;
+  --bg2: #f7f7f8;
+  --panel: #e6e6e9;
+  --text: #111;
+  --text-dim: #444;
+  --accent: #6366f1;
+  --border: #d0d0d5;
+}
+
+/* Dark */
+[data-theme="dark"] {
+  --bg: #0B0F17;
+  --bg2: #111827;
+  --panel: #1a1f2b;
+  --text: #e5e7eb;
+  --text-dim: #9ca3af;
+  --accent: #8b5cf6;
+  --border: #374151;
+}
+
+/* Light */
+[data-theme="light"] {
+  --bg: #ffffff;
+  --bg2: #f7f7f8;
+  --panel: #e6e6e9;
+  --text: #111;
+  --text-dim: #444;
+  --accent: #6366f1;
+  --border: #d0d0d5;
+}
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(-4px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
