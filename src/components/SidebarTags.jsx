@@ -46,24 +46,12 @@ export default function SidebarTags({ selectedTagId, onSelect, isExpanded }) {
   fontSize: 15,
   userSelect: "none",
   transition: "0.2s ease",
-backgroundColor: isActive
-    ? (tag === "all" ? "var(--accent)" : `${color}22`)
-    : "transparent",
-
-  color: isActive
-    ? (tag === "all" ? "white" : color)
-    : (tag === "all" ? "var(--text)" : "var(--text-dim)"),
-
-  border: `1px solid ${
-    isActive
-      ? (tag === "all" ? "var(--accent)" : color)
-      : "var(--border)"
-  }`,
-
-  boxShadow: isActive && tag !== "all"
-    ? `0 0 10px ${color}55`
-    : "none",
-
+ backgroundColor: isActive
+  ? (tag === "all" ? "var(--accent)" : color)   // 🔥 solid fill
+   : "transparent",
+ color: isActive ? "white" : (tag === "all" ? "var(--text)" : "var(--text-dim)"),
+ border: `1px solid ${isActive ? (tag === "all" ? "var(--accent)" : color) : "var(--border)"}`,
+  boxShadow: "none",
   fontWeight: isActive ? 600 : 400,
   whiteSpace: "nowrap",
   overflow: "hidden",
