@@ -31,7 +31,8 @@ export default function SidebarTags({ selectedTagId, onSelect, isExpanded }) {
       {tags.map((tag) => {
         const label = tag.charAt(0).toUpperCase() + tag.slice(1);
         const isActive = selectedTagId === tag;
-        const color = colorFromTag(tag);
+        const color = tag === "all" ? "var(--accent)" : colorFromTag(tag);
+
 
         return (
           <div
@@ -45,25 +46,38 @@ export default function SidebarTags({ selectedTagId, onSelect, isExpanded }) {
   fontSize: 15,
   userSelect: "none",
   transition: "0.2s ease",
+backgroundColor: isActive
+    ? (tag === "all" ? "var(--accent)" : `${color}22`)
+    : "transparent",
 
-  
-  backgroundColor: isActive ? color : "transparent",
-  color: isActive ? "white" : "var(--text)",
+  color: isActive
+    ? (tag === "all" ? "white" : color)
+    : (tag === "all" ? "var(--text)" : "var(--text-dim)"),
 
-  border: `1px solid ${isActive ? color : "transparent"}`,
+  border: `1px solid ${
+    isActive
+      ? (tag === "all" ? "var(--accent)" : color)
+      : "var(--border)"
+  }`,
+
+  boxShadow: isActive && tag !== "all"
+    ? `0 0 10px ${color}55`
+    : "none",
+
   fontWeight: isActive ? 600 : 400,
   whiteSpace: "nowrap",
   overflow: "hidden",
-}}
-onMouseEnter={(e) => {
+}}onMouseEnter={(e) => {
   if (!isActive) {
-    e.currentTarget.style.backgroundColor = `${color}22`; }
+    e.currentTarget.style.backgroundColor = tag === "all" ? "var(--panel)" : `${color}18`;
+  }
 }}
 onMouseLeave={(e) => {
   if (!isActive) {
     e.currentTarget.style.backgroundColor = "transparent";
   }
 }}
+
        >
             {isExpanded ? label : label[0]}
           </div>
