@@ -6,7 +6,7 @@ import { colorFromTag } from "../utils/colorFromTag";
 
 export default function JournalListPage() {
   const navigate = useNavigate();
-  const { selectedTagId, search } = useOutletContext(); // ✅ shared search
+  const { selectedTagId, search } = useOutletContext();
   const [entries, setEntries] = useState([]);
 
   useEffect(() => {
@@ -15,7 +15,7 @@ export default function JournalListPage() {
 
   async function loadEntries() {
     try {
-      const res = await authFetch("http://localhost:8080/entries/journal");
+      const res = await authFetch("/api/entries/journal");
       const data = await res.json();
       const list = Array.isArray(data.entries) ? data.entries : [];
 
@@ -37,21 +37,34 @@ export default function JournalListPage() {
     }
   }
 
-  async function togglePin(entryId) {
-    await authFetch(`http://localhost:8080/entries/${entryId}/pin`, { method: "PUT" });
+  async function togglePin(id) {
+    await authFetch(`/api/entries/${id}/pin`, { method: "PUT" });
     loadEntries();
   }
 
-  async function deleteEntry(entryId) {
+  async function deleteEntry(id) {
     if (!confirm("Delete this entry?")) return;
-    await authFetch(`http://localhost:8080/entries/${entryId}`, { method: "DELETE" });
+    await authFetch(`/api/entries/${id}`, { method: "DELETE" });
     loadEntries();
   }
+  
+function withAlpha(hsl, alpha) {
+ 
+  const m = hsl.match(/hsl\(\s*([\d.]+)[,\s]+([\d.]+)%[,\s]+([\d.]+)%\s*\)/i);
+  if (m) {
+    const [_, h, s, l] = m;
+    return `hsl(${h} ${s}% ${l}% / ${alpha})`;
+  }
+ return hsl;
+}
+
+
 
   return (
-    <div style={{ padding: "32px", color: "var(--text)" }}>
+    <div style={{ padding: 32, color: "var(--text)" }}>
       <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center" }}>
         <h1 style={{ fontSize: 28, fontWeight: 700 }}>Your Journal Entries</h1>
+
         <button
           onClick={() => navigate("/journals/new")}
           style={{
@@ -69,13 +82,13 @@ export default function JournalListPage() {
 
       <ul style={{ marginTop: 24, display: "flex", flexDirection: "column", gap: 16 }}>
         {entries
-          .filter((entry) => {
-            if (selectedTagId !== "all" && !entry.tags?.includes(selectedTagId)) return false;
+          .filter((e) => {
+            if (selectedTagId !== "all" && !e.tags?.includes(selectedTagId)) return false;
             if (!search) return true;
             const q = search.toLowerCase();
             return (
-              entry.entryTitle.toLowerCase().includes(q) ||
-              entry.content.toLowerCase().includes(q)
+              e.entryTitle.toLowerCase().includes(q) ||
+              e.content.toLowerCase().includes(q)
             );
           })
           .map((entry) => {
@@ -83,64 +96,79 @@ export default function JournalListPage() {
             const color = tag ? colorFromTag(tag) : "#9CA3AF";
 
             return (
-              <li
-                key={entry.id}
-                style={{
-                  border: `1px solid ${color}33`,
-                  backgroundColor: "var(--panel)",
-                  borderRadius: 8,
-                  padding: 16,
-                  cursor: "pointer",
-                  display: "flex",
-                  justifyContent: "space-between",
-                  alignItems: "center",
-                  transition: "0.18s",
-                }}
-                onMouseEnter={(e) => {
-                  e.currentTarget.style.transform = "translateY(-2px)";
-                  e.currentTarget.style.boxShadow = `0 4px 14px ${color}33`;
-                  e.currentTarget.style.borderColor = color;
-                }}
-                onMouseLeave={(e) => {
-                  e.currentTarget.style.transform = "translateY(0px)";
-                  e.currentTarget.style.boxShadow = "none";
-                  e.currentTarget.style.borderColor = `${color}33`;
-                }}
-                onClick={() => navigate(`/journals/${entry.id}/edit`)}
-              >
+<li
+  key={entry.id}
+  style={{
+    border: `1px solid ${color}`,     // simple line, always visible
+    backgroundColor: "var(--panel)",
+    borderRadius: 12,
+    padding: 20,
+    cursor: "pointer",
+    display: "flex",
+    justifyContent: "space-between",
+    alignItems: "center",
+    boxShadow: "none",                 // no glow at rest
+    transition: "0.25s ease",
+  }}
+  onMouseEnter={(e) => {
+    e.currentTarget.style.transform = "translateY(-2px)";
+    e.currentTarget.style.boxShadow = `0 0 12px ${color}44`; // glow only on hover
+    e.currentTarget.style.borderColor = color;               // keep the same line color
+  }}
+  onMouseLeave={(e) => {
+    e.currentTarget.style.transform = "none";
+    e.currentTarget.style.boxShadow = "none";                // remove glow
+    e.currentTarget.style.borderColor = color;               // keep the same line color
+  }}
+>
+
                 <div>
                   <h2 style={{ fontSize: 20, fontWeight: entry.isPinned ? 800 : 600, color }}>
                     {entry.entryTitle}
                   </h2>
 
-                  <div style={{ display: "flex", gap: 6, marginTop: 6 }}>
+                  <div style={{ display: "flex", gap: 8, marginTop: 6 }}>
                     {entry.tags?.map((t) => {
                       const pill = colorFromTag(t);
                       return (
-                        <span
-                          key={t}
-                          style={{
-                            padding: "3px 8px",
-                            borderRadius: 12,
-                            backgroundColor: `${pill}22`,
-                            color: pill,
-                            fontSize: 12,
-                          }}
-                        >
-                          {t}
-                        </span>
+                      <span
+                        key={t}
+                        style={{
+                          padding: "4px 10px",
+                          borderRadius: "9999px",
+                          fontSize: 12,
+                          fontWeight: 500,
+
+                          // ✅ SOLID FILL
+                          backgroundColor: pill,
+                          color: "white",
+                          border: "none",
+
+                          transition: "0.2s ease",
+                        }}
+                        onMouseEnter={(e) => {
+                          e.currentTarget.style.opacity = 0.85;
+                        }}
+                        onMouseLeave={(e) => {
+                          e.currentTarget.style.opacity = 1;
+                        }}
+                      >
+                        {t}
+                      </span>
+
+
                       );
                     })}
                   </div>
 
-                  <p style={{ color: "var(--text-dim)", marginTop: 6 }}>
+                  <p style={{ color: "var(--text-dim)", marginTop: 8 }}>
                     {entry.content.length > 120
                       ? entry.content.substring(0, 120) + "…"
                       : entry.content}
                   </p>
                 </div>
 
-                <div style={{ display: "flex", gap: 14, alignItems: "center" }}>
+                <div style={{ display: "flex", alignItems: "center", gap: 14 }}>
                   <span
                     style={{
                       fontSize: 22,

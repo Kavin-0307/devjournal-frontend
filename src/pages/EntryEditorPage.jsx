@@ -26,7 +26,7 @@ export default function EntryEditorPage() {
   useEffect(() => {
     if (!id) return;
     (async () => {
-      const res = await authFetch(`http://localhost:8080/entries/${id}`);
+      const res = await authFetch(`/api/entries/${id}`);
       if (!res.ok) return alert("Failed to load entry");
       const data = await res.json();
       setEntryTitle(data.entryTitle || "");
@@ -61,8 +61,8 @@ export default function EntryEditorPage() {
     };
 
     const url = id
-      ? `http://localhost:8080/entries/${id}`
-      : `http://localhost:8080/entries/journal`;
+  ? `/api/entries/${id}`
+  : `/api/entries/journal`;
 
     const method = id ? "PUT" : "POST";
 

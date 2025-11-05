@@ -1,15 +1,20 @@
 // src/utils/authFetch.js
-const API_BASE = import.meta.env.VITE_API_BASE; // e.g. https://your-backend.onrender.com
+const API_BASE = import.meta.env.VITE_API_BASE_URL; // ✅ must match LoginPage
 
 export default function authFetch(path, options = {}) {
-  const url = path.startsWith('http') ? path : `${API_BASE}${path}`;
-  const token = localStorage.getItem('token');
+  const token = localStorage.getItem("token");
+
+  const url = path.startsWith("http")
+    ? path
+    : `${API_BASE}${path}`;
+
   return fetch(url, {
-    credentials: 'include',
+    ...options,
     headers: {
+      "Content-Type": "application/json",
       ...(options.headers || {}),
       ...(token ? { Authorization: `Bearer ${token}` } : {}),
     },
-    ...options,
+    credentials: "include",
   });
 }

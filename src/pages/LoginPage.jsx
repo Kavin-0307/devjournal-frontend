@@ -5,16 +5,25 @@ export default function LoginPage() {
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
   const navigate = useNavigate();
+  const API_BASE = import.meta.env.VITE_API_BASE_URL; // ✅ define once
+console.log("API_BASE:", JSON.stringify(API_BASE));
 
   async function handleLogin(e) {
     e.preventDefault();
 
     try {
-      const res = await fetch("http://localhost:8080/api/auth/login", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ username, password }),
-      });
+      const res = await fetch(`${API_BASE}/api/auth/login`, {
+  method: "POST",
+  headers: {
+    "Content-Type": "application/json"
+  },
+  body: JSON.stringify({
+    username,
+    password
+  }),
+  credentials: "include"
+});
+
 
       if (!res.ok) {
         alert("Invalid login");
@@ -22,17 +31,13 @@ export default function LoginPage() {
       }
 
       const data = await res.json();
+      localStorage.setItem("token", data.token); // ✅ store token
 
-      // ✅ Save token so authFetch can use it later
-      localStorage.setItem("token", data.token);
-      console.log("Stored Token:", localStorage.getItem("token"));
-      // ✅ Go to journal list
-      navigate("/");
-    }  catch (err) {
-  console.error("Login error:", err);  // <- use it
-  alert("Login failed");
-}
-
+      navigate("/"); // ✅ go to home/journals page
+    } catch (err) {
+      console.error("Login error:", err);
+      alert("Login failed — check console");
+    }
   }
 
   return (
