@@ -9,10 +9,10 @@ export default function EntryEditorPage() {
 
   const [entryTitle, setEntryTitle] = useState("");
   const [content, setContent] = useState("");
-  const [tags, setTags] = useState([]); // array of strings
+  const [tags, setTags] = useState([]); 
   const [newTag, setNewTag] = useState("");
 
-  // ✅ Reset fields when creating a new entry
+
   useEffect(() => {
     if (!id) {
       setEntryTitle("");
@@ -22,7 +22,7 @@ export default function EntryEditorPage() {
     }
   }, [id]);
 
-  // ✅ Load entry if editing
+  
   useEffect(() => {
     if (!id) return;
     (async () => {
@@ -38,7 +38,7 @@ export default function EntryEditorPage() {
   function addTagFromInput() {
     const t = newTag.toLowerCase().trim();
     if (!t) return;
-    setTags(prev => Array.from(new Set([...prev, t]))); // de-dupe
+    setTags(prev => Array.from(new Set([...prev, t])));  
     setNewTag("");
   }
 
@@ -47,7 +47,6 @@ export default function EntryEditorPage() {
   }
 
   async function handleSave() {
-    // ✅ Construct finalTags *including* any tag still typed but not submitted
     const pending = newTag.toLowerCase().trim();
     const finalTags = Array.from(new Set([
       ...tags,

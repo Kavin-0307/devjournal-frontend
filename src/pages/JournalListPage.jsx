@@ -99,7 +99,7 @@ function withAlpha(hsl, alpha) {
 <li
   key={entry.id}
   style={{
-    border: `1px solid ${color}`,     // simple line, always visible
+    border: `1px solid ${color}`,     
     backgroundColor: "var(--panel)",
     borderRadius: 12,
     padding: 20,
@@ -107,18 +107,18 @@ function withAlpha(hsl, alpha) {
     display: "flex",
     justifyContent: "space-between",
     alignItems: "center",
-    boxShadow: "none",                 // no glow at rest
+    boxShadow: "none",                 
     transition: "0.25s ease",
   }}
   onMouseEnter={(e) => {
     e.currentTarget.style.transform = "translateY(-2px)";
-    e.currentTarget.style.boxShadow = `0 0 12px ${color}44`; // glow only on hover
-    e.currentTarget.style.borderColor = color;               // keep the same line color
+    e.currentTarget.style.boxShadow = `0 0 12px ${color}44`; 
+    e.currentTarget.style.borderColor = color;               
   }}
   onMouseLeave={(e) => {
     e.currentTarget.style.transform = "none";
-    e.currentTarget.style.boxShadow = "none";                // remove glow
-    e.currentTarget.style.borderColor = color;               // keep the same line color
+    e.currentTarget.style.boxShadow = "none";
+    e.currentTarget.style.borderColor = color;
   }}
 >
 
@@ -139,7 +139,7 @@ function withAlpha(hsl, alpha) {
                           fontSize: 12,
                           fontWeight: 500,
 
-                          // ✅ SOLID FILL
+                        
                           backgroundColor: pill,
                           color: "white",
                           border: "none",

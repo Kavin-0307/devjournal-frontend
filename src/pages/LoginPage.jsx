@@ -4,7 +4,7 @@ import { useNavigate } from "react-router-dom";
 export default function LoginPage() {
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
-  const [isRegister, setIsRegister] = useState(false); // ✅ toggle form
+  const [isRegister, setIsRegister] = useState(false); 
   const [error, setError] = useState("");
 
   const navigate = useNavigate();
@@ -32,12 +32,12 @@ export default function LoginPage() {
       }
 
       if (isRegister) {
-        // ✅ After register, switch to login mode
+        
         setIsRegister(false);
         return;
       }
 
-      // ✅ Login success
+     
       localStorage.setItem("token", data.token);
       navigate("/");
 

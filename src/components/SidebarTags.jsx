@@ -46,7 +46,7 @@ export default function SidebarTags({ selectedTagId, onSelect, isExpanded }) {
   userSelect: "none",
   transition: "0.2s ease",
 
-  // ✅ SOLID fill when active
+  
   backgroundColor: isActive ? color : "transparent",
   color: isActive ? "white" : "var(--text)",
 
@@ -57,8 +57,7 @@ export default function SidebarTags({ selectedTagId, onSelect, isExpanded }) {
 }}
 onMouseEnter={(e) => {
   if (!isActive) {
-    e.currentTarget.style.backgroundColor = `${color}22`; // subtle hover tint
-  }
+    e.currentTarget.style.backgroundColor = `${color}22`; }
 }}
 onMouseLeave={(e) => {
   if (!isActive) {
